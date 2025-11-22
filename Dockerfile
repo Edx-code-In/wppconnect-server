@@ -1,29 +1,28 @@
-# استخدم صورة node alpine
-FROM node:22.21.1-alpine AS base
+# استخدم صورة node مع glibc (Debian)
+FROM node:22-bullseye AS base
+
 WORKDIR /usr/src/wpp-server
 ENV NODE_ENV=production PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
 # تثبيت المكتبات اللازمة لـ sharp + chromium
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     vips-dev \
-    fftw-dev \
+    fftw3-dev \
     libpng-dev \
-    libjpeg-turbo-dev \
+    libjpeg-dev \
     lcms2-dev \
-    openexr-dev \
-    tiff-dev \
-    giflib-dev \
-    glib-dev \
+    libtiff-dev \
+    libgif-dev \
+    libglib2.0-dev \
     chromium \
-    bash \
     git \
     python3 \
     make \
     g++ \
-    libc6-compat \
-    && rm -rf /var/cache/apk/*
+    bash \
+    && rm -rf /var/lib/apt/lists/*
 
-# نسخ package.json و package-lock.json (بدون yarn.lock)
+# نسخ package.json و lockfile
 COPY package*.json ./
 
 # تثبيت الحزم مع تثبيت sharp optional dependency
