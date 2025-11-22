@@ -23,18 +23,17 @@ RUN apk add --no-cache \
     libc6-compat \
     && rm -rf /var/cache/apk/*
 
-# نسخ package.json و lockfile
-COPY package.json yarn.lock ./
+# نسخ package.json و package-lock.json (بدون yarn.lock)
+COPY package*.json ./
 
 # تثبيت الحزم مع تثبيت sharp optional dependency
-RUN yarn install --frozen-lockfile --ignore-engines --force
-RUN yarn add sharp --ignore-engines
+RUN npm install --include=optional
 
 # مرحلة build
 FROM base AS build
 WORKDIR /usr/src/wpp-server
 COPY . .
-RUN yarn build
+RUN npm run build
 
 # مرحلة الإنتاج
 FROM base
