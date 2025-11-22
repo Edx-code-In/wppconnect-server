@@ -1,4 +1,3 @@
-# استخدم صورة node مع glibc (Debian)
 FROM node:22-bullseye AS base
 
 WORKDIR /usr/src/wpp-server
@@ -6,11 +5,11 @@ ENV NODE_ENV=production PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
 # تثبيت المكتبات اللازمة لـ sharp + chromium
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    vips-dev \
-    fftw3-dev \
+    libvips-dev \
+    libfftw3-dev \
     libpng-dev \
     libjpeg-dev \
-    lcms2-dev \
+    liblcms2-dev \
     libtiff-dev \
     libgif-dev \
     libglib2.0-dev \
